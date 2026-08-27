@@ -112,15 +112,20 @@ Design constraints:
 
 - 10" Android tablet, landscape, Chrome, likely mounted or handled with
   gloves: ≥48px touch targets, high contrast, big type, minimal chrome.
-- Screens are *workflows*, not admin panels. Target set for v1:
-  1. **Dashboard** — printer wall (status, progress, thumbnail, time left) +
-     order counts. The default idle screen.
+- Navigation: a dropdown in the top-left (no app title — the screen name IS
+  the header) switches between screens; hash-based URLs (`#/orders`) so
+  refresh and bookmarks keep the screen. Screens:
+  1. **Dashboard** — printer wall (status, progress, time left) + spool
+     strip + low-stock/health indicators. The default idle screen.
   2. **Orders** — queue of open orders, grouped by status; tap into an order
-     to see items and linked prints.
-  3. **Start a print** — pick archive/preset → printer (filtered to
-     compatible+idle) → confirm filament → go. Backed by BamBuddy re-print /
-     queue endpoints.
-  4. **Spools** — quick spool lookup/assignment, low-stock at a glance.
+     to see items and linked prints (Phase 2).
+  3. **Current Prints** — active prints only, sorted by time remaining,
+     including attention states (clear plate, errors).
+  4. **Filament** — spool inventory: color, remaining weight, location,
+     low-stock first. (Start-a-print flow will pick filament in context —
+     Phase 3.)
+  5. **Products** — catalog view (scope TBD with owner; likely listing_map
+     management — what we sell mapped to what we print).
 - Every action reachable in ≤3 taps from the dashboard.
 - Escape hatch: deep links into the full BamBuddy UI for anything advanced.
 

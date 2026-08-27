@@ -14,12 +14,15 @@
 - [ ] Reconcile print outcomes → order item states (webhooks + polling fallback)
 - [ ] Implement listing_map for one-tap repeat prints
 - [ ] Decide app auth: shared operator PIN vs per-user (see docs/roadmap.md open decisions)
+- [ ] Define + build Products screen (likely catalog / listing_map management; scope with owner)
 - [ ] Replace placeholder SVG PWA icon with proper PNG icon set (192/512 + maskable)
 - [ ] Add prettier config to frontend (CLAUDE.md names it; Vite template ships oxlint only)
 
 ## In Progress
 
 ## Done
+
+- [x] Screen navigation dropdown (Dashboard / Orders / Current Prints / Filament / Products) (done 2026-08-27: header dropdown replaces title; hash URLs; Current Prints + Filament screens live, Orders/Products placeholders)
 
 - [x] Build BamBuddy client + /ws/status relay + dashboard printer-wall screen (done 2026-08-27: REST-polling relay broadcasts snapshots; wall shows state/progress/layers/temps/errors; per-printer failures degrade to OFFLINE tile)
 - [x] Build Spoolman client + spool/low-stock display (done 2026-08-27: spool strip with color/remaining/location, low-stock highlight + header count)

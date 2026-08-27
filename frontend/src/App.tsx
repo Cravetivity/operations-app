@@ -1,14 +1,35 @@
-import PrinterCard from './components/PrinterCard'
-import SpoolStrip from './components/SpoolStrip'
+import ScreenMenu from './components/ScreenMenu'
+import { useScreen } from './navigation'
+import DashboardScreen from './screens/DashboardScreen'
+import FilamentScreen from './screens/FilamentScreen'
+import PlaceholderScreen from './screens/PlaceholderScreen'
+import PrintsScreen from './screens/PrintsScreen'
 import { useDashboard } from './useDashboard'
+import type { Dashboard } from './types'
+
+function Screen({ screen, data }: { screen: string; data: Dashboard }) {
+  switch (screen) {
+    case 'orders':
+      return <PlaceholderScreen title="Orders" phase="Phase 2" />
+    case 'prints':
+      return <PrintsScreen data={data} />
+    case 'filament':
+      return <FilamentScreen data={data} />
+    case 'products':
+      return <PlaceholderScreen title="Products" phase="a later phase" />
+    default:
+      return <DashboardScreen data={data} />
+  }
+}
 
 export default function App() {
   const { data, backendDown } = useDashboard()
+  const [screen, setScreen] = useScreen()
 
   return (
     <main className="min-h-screen bg-slate-900 text-slate-100 p-6 flex flex-col gap-6">
       <header className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold tracking-tight">Cravetivity Operations</h1>
+        <ScreenMenu screen={screen} onSelect={setScreen} />
         <div className="text-sm text-slate-400">
           {backendDown && <span className="text-red-400 font-semibold">Backend unreachable</span>}
           {!backendDown && data?.bambuddy === 'unreachable' && (
@@ -26,20 +47,7 @@ export default function App() {
       </header>
 
       {!data && !backendDown && <p className="text-slate-400">Loading…</p>}
-
-      {data && (
-        <>
-          <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 grow content-start">
-            {data.printers.map((p) => (
-              <PrinterCard key={p.id} printer={p} />
-            ))}
-            {data.printers.length === 0 && data.bambuddy === 'ok' && (
-              <p className="text-slate-400">No printers configured in BamBuddy.</p>
-            )}
-          </section>
-          <SpoolStrip data={data} />
-        </>
-      )}
+      {data && <Screen screen={screen} data={data} />}
     </main>
   )
 }

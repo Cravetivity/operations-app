@@ -14,6 +14,9 @@
 - [ ] Reconcile print outcomes → order item states (webhooks + polling fallback)
 - [ ] Implement listing_map for one-tap repeat prints
 - [ ] Decide app auth: shared operator PIN vs per-user (see docs/roadmap.md open decisions)
+- [ ] QR scan workflow on tablet camera (BarcodeDetector): scan CRV:S/CRV:B codes to drive check-in/check-out and future print flow
+- [ ] Wire BamBuddy AMS assignment API for check-out once verified against live instance
+- [ ] Direct thermal printing (skip OS print dialog) if label printer supports network ZPL/ESC-POS — need printer model from owner
 - [ ] Define + build Products screen (likely catalog / listing_map management; scope with owner)
 - [ ] Replace placeholder SVG PWA icon with proper PNG icon set (192/512 + maskable)
 - [ ] Add prettier config to frontend (CLAUDE.md names it; Vite template ships oxlint only)
@@ -21,6 +24,8 @@
 ## In Progress
 
 ## Done
+
+- [x] Filament logistics: 1x2 thermal labels (spool + bin QR), bin registry, check-in/check-out, printer/AMS-slot assignment (done 2026-08-27: bins live in Spoolman locations setting; labels via reportlab+segno PDFs; Filament screen has bin chips + To bin / To printer pickers)
 
 - [x] Screen navigation dropdown (Dashboard / Orders / Current Prints / Filament / Products) (done 2026-08-27: header dropdown replaces title; hash URLs; Current Prints + Filament screens live, Orders/Products placeholders)
 

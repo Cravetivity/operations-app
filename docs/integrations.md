@@ -52,8 +52,13 @@ nice-to-have, not the model.
 - No auth built in (deploy on trusted network; front with a proxy if needed).
 - BamBuddy already syncs per-filament usage into Spoolman — so **we read from
   Spoolman for inventory display and low-stock warnings, and avoid writing
-  usage ourselves** (BamBuddy handles decrementing). We may write when
-  operators do manual inventory actions (new spool intake, corrections).
+  usage ourselves** (BamBuddy handles decrementing). We do write for manual
+  operator actions: spool `location` (check-in/check-out) and the `locations`
+  setting (bin registry) — see architecture.md, Inventory & labels.
+- Verified against Spoolman 0.26.1: `GET /api/v1/location` (used locations),
+  `PATCH /api/v1/spool/{id}` (location updates), `POST /api/v1/setting/locations`
+  (registry; value is a JSON-encoded string). Filament creation requires
+  `density` (undocumented in the wiki; the seed script sets it).
 
 ## Etsy
 

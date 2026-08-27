@@ -6,7 +6,7 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
-from app.api import dashboard, health
+from app.api import dashboard, health, inventory
 from app.clients.spoolman import SpoolmanClient
 from app.config import get_settings
 from app.services.status import poll_bambuddy_forever
@@ -42,6 +42,7 @@ def create_app() -> FastAPI:
     )
     app.include_router(health.router)
     app.include_router(dashboard.router)
+    app.include_router(inventory.router)
     app.include_router(ws_status.router)
 
     # In the Docker image the built PWA is copied to backend/static and served

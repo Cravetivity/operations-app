@@ -143,6 +143,27 @@ marketplace by hand; API-side fulfillment is a later phase).
 remaining weight (Spoolman) → low-spool warning before dispatching a long
 print.
 
+## Inventory & labels
+
+Decision (2026-08-27): filament location tracking lives in **Spoolman**, not
+our database — our app adds workflows and labels on top.
+
+- **Bins** are entries in Spoolman's `locations` setting (the same list its
+  UI shows as lanes), so both UIs always agree and no schema drift is
+  possible. Bins have no numeric id; the **name is the identity** — renaming
+  a bin means reprinting its label.
+- **Check-in/check-out** just updates `spool.location` via PATCH. A spool
+  assigned to a printer uses the parseable convention
+  `"<printer name> / AMS <slot>"` (bin names may not contain `/`), which
+  appears as a per-printer lane in Spoolman's own UI. Wiring BamBuddy's AMS
+  assignment API on top is pending live verification (TODO.md).
+- **Labels** are 2x1 in monochrome PDFs (`GET /api/labels/spool/{id}`,
+  `/api/labels/bin/{name}`) rendered with reportlab + segno, printed at 100%
+  scale through any OS thermal driver. QR payloads are compact for reliable
+  small-format scans: `CRV:S:<spool id>` and `CRV:B:<bin name>`. These codes
+  are the hook for the future scan-driven print workflow (scan spool → scan
+  printer/bin) on the tablet camera.
+
 ## Development harness
 
 Phase 1 was built without live credentials, against services in the compose

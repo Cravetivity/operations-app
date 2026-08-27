@@ -7,14 +7,22 @@ import PrintsScreen from './screens/PrintsScreen'
 import { useDashboard } from './useDashboard'
 import type { Dashboard } from './types'
 
-function Screen({ screen, data }: { screen: string; data: Dashboard }) {
+function Screen({
+  screen,
+  data,
+  refresh,
+}: {
+  screen: string
+  data: Dashboard
+  refresh: () => void
+}) {
   switch (screen) {
     case 'orders':
       return <PlaceholderScreen title="Orders" phase="Phase 2" />
     case 'prints':
       return <PrintsScreen data={data} />
     case 'filament':
-      return <FilamentScreen data={data} />
+      return <FilamentScreen data={data} refresh={refresh} />
     case 'products':
       return <PlaceholderScreen title="Products" phase="a later phase" />
     default:
@@ -23,7 +31,7 @@ function Screen({ screen, data }: { screen: string; data: Dashboard }) {
 }
 
 export default function App() {
-  const { data, backendDown } = useDashboard()
+  const { data, backendDown, refresh } = useDashboard()
   const [screen, setScreen] = useScreen()
 
   return (
@@ -47,7 +55,7 @@ export default function App() {
       </header>
 
       {!data && !backendDown && <p className="text-slate-400">Loading…</p>}
-      {data && <Screen screen={screen} data={data} />}
+      {data && <Screen screen={screen} data={data} refresh={refresh} />}
     </main>
   )
 }

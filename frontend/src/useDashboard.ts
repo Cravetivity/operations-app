@@ -1,20 +1,26 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import type { Dashboard, Snapshot } from './types'
 
 const SPOOL_REFRESH_MS = 60_000
 const WS_RETRY_MS = 5_000
 
 /** Full dashboard via REST (printers + spools), live printer updates via
- *  /ws/status. If the socket drops, it retries; spools refresh on a timer. */
-export function useDashboard(): { data: Dashboard | null; backendDown: boolean } {
+ *  /ws/status. If the socket drops, it retries; spools refresh on a timer.
+ *  `refresh` refetches immediately (e.g. after a spool mutation) without
+ *  touching the websocket. */
+export function useDashboard(): {
+  data: Dashboard | null
+  backendDown: boolean
+  refresh: () => void
+} {
   const [data, setData] = useState<Dashboard | null>(null)
   const [backendDown, setBackendDown] = useState(false)
+  const [refreshTick, setRefreshTick] = useState(0)
+  const refresh = useCallback(() => setRefreshTick((t) => t + 1), [])
 
+  // REST: initial load, periodic spool refresh, and explicit refresh().
   useEffect(() => {
     let disposed = false
-    let ws: WebSocket | null = null
-    let retry: ReturnType<typeof setTimeout>
-
     const fetchDashboard = () =>
       fetch('/api/dashboard')
         .then((r) => r.json())
@@ -25,6 +31,20 @@ export function useDashboard(): { data: Dashboard | null; backendDown: boolean }
           }
         })
         .catch(() => !disposed && setBackendDown(true))
+
+    fetchDashboard()
+    const timer = setInterval(fetchDashboard, SPOOL_REFRESH_MS)
+    return () => {
+      disposed = true
+      clearInterval(timer)
+    }
+  }, [refreshTick])
+
+  // WebSocket: live printer updates, reconnect on drop. Mount-scoped.
+  useEffect(() => {
+    let disposed = false
+    let ws: WebSocket | null = null
+    let retry: ReturnType<typeof setTimeout>
 
     const connect = () => {
       if (disposed) return
@@ -40,16 +60,13 @@ export function useDashboard(): { data: Dashboard | null; backendDown: boolean }
       }
     }
 
-    fetchDashboard()
     connect()
-    const spoolTimer = setInterval(fetchDashboard, SPOOL_REFRESH_MS)
     return () => {
       disposed = true
       clearTimeout(retry)
-      clearInterval(spoolTimer)
       ws?.close()
     }
   }, [])
 
-  return { data, backendDown }
+  return { data, backendDown, refresh }
 }

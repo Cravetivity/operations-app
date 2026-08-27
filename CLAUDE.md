@@ -22,10 +22,13 @@ and glanceability over feature completeness.
 
 ## Current status
 
-**Greenfield — no application code exists yet.** The `docs/` directory is the
-source of truth for intended architecture and scope. When you implement
-something, update the relevant doc in the same change. See
-[docs/roadmap.md](docs/roadmap.md) for build order.
+**Phase 0 scaffold complete (2026-08-27):** backend skeleton (health API,
+config, DB session, client/connector skeletons), frontend PWA shell with a
+hello dashboard, and a verified Docker Compose stack. No real features yet —
+Phase 1 (printer wall) is next. The `docs/` directory is the source of truth
+for intended architecture and scope. When you implement something, update the
+relevant doc in the same change. See [docs/roadmap.md](docs/roadmap.md) for
+build order.
 
 ## Stack (decided)
 

@@ -5,12 +5,12 @@
 
 ## Phase 0 — Scaffold
 
-- [ ] Backend skeleton (FastAPI, pydantic-settings, SQLAlchemy async, Alembic,
-      pytest, ruff) under `backend/`, managed with `uv`
-- [ ] Frontend skeleton (Vite + React + TS + Tailwind + vite-plugin-pwa) under
-      `frontend/`
-- [ ] `docker-compose.yml` (app + postgres) and complete `.env.example`
-- [ ] CI-less smoke path: `docker compose up` serves a hello dashboard
+- [x] Backend skeleton (FastAPI, pydantic-settings, SQLAlchemy async, Alembic,
+      pytest, ruff) under `backend/`, managed with `uv` (2026-08-27)
+- [x] Frontend skeleton (Vite + React + TS + Tailwind + vite-plugin-pwa) under
+      `frontend/` (2026-08-27)
+- [x] `docker-compose.yml` (app + postgres) and complete `.env.example` (2026-08-27)
+- [x] CI-less smoke path: `docker compose up` serves a hello dashboard (2026-08-27)
 
 ## Phase 1 — Read-only printer wall (first useful thing on the tablet)
 
@@ -52,6 +52,7 @@
 - [ ] Additional order sources (new channel row + connector or ingester)
 
 ## Open decisions
+
 - **App auth:** shared PIN vs per-user (BamBuddy has OIDC; do we care who
   tapped?). Leaning shared PIN for v1.
 - **Mirror orders into BamBuddy projects?** Nice for cross-reference in

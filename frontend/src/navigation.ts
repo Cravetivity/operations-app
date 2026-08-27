@@ -8,11 +8,16 @@ export const SCREENS = [
   { key: 'products', label: 'Products' },
 ] as const
 
-export type ScreenKey = (typeof SCREENS)[number]['key']
+// Desk/setup tasks, kept visually separate at the bottom of the menu.
+export const ADMIN_SCREEN = { key: 'admin', label: 'Admin' } as const
+
+export type ScreenKey = (typeof SCREENS)[number]['key'] | typeof ADMIN_SCREEN.key
+
+const ALL_KEYS: string[] = [...SCREENS.map((s) => s.key), ADMIN_SCREEN.key]
 
 function fromHash(): ScreenKey {
   const key = location.hash.replace(/^#\/?/, '')
-  return SCREENS.some((s) => s.key === key) ? (key as ScreenKey) : 'dashboard'
+  return ALL_KEYS.includes(key) ? (key as ScreenKey) : 'dashboard'
 }
 
 /** Hash-based navigation (#/orders) so refresh and tablet bookmarks keep the

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { SCREENS, type ScreenKey } from '../navigation'
+import { ADMIN_SCREEN, SCREENS, type ScreenKey } from '../navigation'
 
 export default function ScreenMenu({
   screen,
@@ -20,7 +20,7 @@ export default function ScreenMenu({
     return () => window.removeEventListener('pointerdown', close)
   }, [open])
 
-  const current = SCREENS.find((s) => s.key === screen)!
+  const current = [...SCREENS, ADMIN_SCREEN].find((s) => s.key === screen)!
 
   return (
     <div className="relative" ref={ref}>
@@ -56,6 +56,19 @@ export default function ScreenMenu({
               {s.label}
             </button>
           ))}
+          <div className="border-t border-slate-700" />
+          <button
+            role="menuitem"
+            onClick={() => {
+              onSelect(ADMIN_SCREEN.key)
+              setOpen(false)
+            }}
+            className={`block w-full px-5 py-3.5 text-left text-base font-medium hover:bg-slate-700 active:bg-slate-600 ${
+              screen === ADMIN_SCREEN.key ? 'text-sky-400' : 'text-slate-400'
+            }`}
+          >
+            {ADMIN_SCREEN.label}
+          </button>
         </div>
       )}
     </div>

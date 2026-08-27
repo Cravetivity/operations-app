@@ -25,6 +25,8 @@
 
 ## Done
 
+- [x] Slim tablet Filament screen (loaded + low + search only); move bins/full inventory to new Admin screen (done 2026-08-27: Admin sits separated at menu bottom; task-focused principle recorded in CLAUDE.md)
+
 - [x] Filament logistics: 1x2 thermal labels (spool + bin QR), bin registry, check-in/check-out, printer/AMS-slot assignment (done 2026-08-27: bins live in Spoolman locations setting; labels via reportlab+segno PDFs; Filament screen has bin chips + To bin / To printer pickers)
 
 - [x] Screen navigation dropdown (Dashboard / Orders / Current Prints / Filament / Products) (done 2026-08-27: header dropdown replaces title; hash URLs; Current Prints + Filament screens live, Orders/Products placeholders)

@@ -101,6 +101,12 @@ line, GitHub checkbox syntax) instead of an external tracker. Protocol:
   lint`; ships with the Vite template) + `prettier` (still to add).
 - Touch UI: minimum 48px tap targets, no hover-dependent interactions, no
   right-click/keyboard-only affordances.
+- Keep tablet screens task-focused, not data-complete (owner direction,
+  2026-08-27): show the subset the current job needs (what's loaded, what's
+  low, search-on-demand) — never full inventories or dense grids. Desk/setup
+  tasks (bin management, label printing, full inventory) belong on the Admin
+  screen; full data management belongs in the upstream UIs (Spoolman,
+  BamBuddy), which we link to rather than reimplement.
 
 ## Commands (once scaffolded)
 

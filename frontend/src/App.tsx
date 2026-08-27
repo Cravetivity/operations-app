@@ -1,5 +1,6 @@
 import ScreenMenu from './components/ScreenMenu'
 import { useScreen } from './navigation'
+import AdminScreen from './screens/AdminScreen'
 import DashboardScreen from './screens/DashboardScreen'
 import FilamentScreen from './screens/FilamentScreen'
 import PlaceholderScreen from './screens/PlaceholderScreen'
@@ -25,6 +26,8 @@ function Screen({
       return <FilamentScreen data={data} refresh={refresh} />
     case 'products':
       return <PlaceholderScreen title="Products" phase="a later phase" />
+    case 'admin':
+      return <AdminScreen data={data} refresh={refresh} />
     default:
       return <DashboardScreen data={data} />
   }

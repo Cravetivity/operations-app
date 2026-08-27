@@ -121,11 +121,16 @@ Design constraints:
      to see items and linked prints (Phase 2).
   3. **Current Prints** — active prints only, sorted by time remaining,
      including attention states (clear plate, errors).
-  4. **Filament** — spool inventory: color, remaining weight, location,
-     low-stock first. (Start-a-print flow will pick filament in context —
-     Phase 3.)
+  4. **Filament** — task-focused, not data-complete (owner direction): what's
+     loaded in printers, what's low, and search-on-demand. Check-in/out and
+     labels act on those subsets. (Start-a-print flow will pick filament in
+     context — Phase 3.)
   5. **Products** — catalog view (scope TBD with owner; likely listing_map
      management — what we sell mapped to what we print).
+  6. **Admin** (bottom of menu, visually separated) — desk/setup tasks kept
+     off the tablet workflows: bin management, label printing, full spool
+     inventory. Full data management stays in the upstream Spoolman/BamBuddy
+     UIs.
 - Every action reachable in ≤3 taps from the dashboard.
 - Escape hatch: deep links into the full BamBuddy UI for anything advanced.
 

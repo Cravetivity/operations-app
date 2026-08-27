@@ -16,7 +16,7 @@
 - [ ] Implement listing_map for one-tap repeat prints
 - [ ] Decide app auth: shared operator PIN vs per-user (see docs/roadmap.md open decisions)
 - [ ] Replace placeholder SVG PWA icon with proper PNG icon set (192/512 + maskable)
-- [ ] Add prettier config to frontend (CLAUDE.md names it; Vite template ships eslint only)
+- [ ] Add prettier config to frontend (CLAUDE.md names it; Vite template ships oxlint only)
 
 ## In Progress
 

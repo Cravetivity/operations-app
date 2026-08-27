@@ -95,7 +95,8 @@ line, GitHub checkbox syntax) instead of an external tracker. Protocol:
   say "BamBuddy unreachable", not crash).
 - Money as integer cents + currency code. Timestamps stored UTC; the UI
   renders local (America/Chicago).
-- Backend: `ruff` (lint + format) and `pytest`. Frontend: `eslint` + `prettier`.
+- Backend: `ruff` (lint + format) and `pytest`. Frontend: `oxlint` (`npm run
+  lint`; ships with the Vite template) + `prettier` (still to add).
 - Touch UI: minimum 48px tap targets, no hover-dependent interactions, no
   right-click/keyboard-only affordances.
 

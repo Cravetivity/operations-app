@@ -2,9 +2,8 @@
 
 ## Backlog
 
-- [ ] Build BamBuddy client; verify endpoints against live instance and pin version in docs/integrations.md
-- [ ] Build /ws/status relay + dashboard printer-wall screen with MJPEG camera proxy
-- [ ] Build Spoolman client + spool/low-stock display
+- [ ] Verify BamBuddy client endpoints against live instance; pin version in docs/integrations.md
+- [ ] MJPEG camera proxy + camera view on printer wall
 - [ ] Create orders schema + migrations (channels, orders, order_items, print_jobs, listing_map)
 - [ ] Implement ChannelOrder upsert service + POST /api/ingest/{channel} with per-channel tokens
 - [ ] Build manual order entry + Orders screen
@@ -21,6 +20,10 @@
 ## In Progress
 
 ## Done
+
+- [x] Build BamBuddy client + /ws/status relay + dashboard printer-wall screen (done 2026-08-27: REST-polling relay broadcasts snapshots; wall shows state/progress/layers/temps/errors; per-printer failures degrade to OFFLINE tile)
+- [x] Build Spoolman client + spool/low-stock display (done 2026-08-27: spool strip with color/remaining/location, low-stock highlight + header count)
+- [x] Dev harness: Spoolman in compose + mock BamBuddy with simulated printers (done 2026-08-27: real Spoolman service + seed script; mock BamBuddy under `--profile dev` simulates 4 printers incl. plate-clear and HMS error states)
 
 - [x] Scaffold backend (FastAPI, uv, SQLAlchemy async, Alembic, pytest, ruff) (done 2026-08-27: backend/ with health API, config, DB session, client/connector skeletons; pytest + ruff green)
 - [x] Write docker-compose.yml (app + postgres) and complete .env.example (done 2026-08-27: compose up verified — /api/health reports db ok, PWA served)

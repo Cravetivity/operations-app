@@ -14,11 +14,13 @@
 
 ## Phase 1 — Read-only printer wall (first useful thing on the tablet)
 
-- [ ] `clients/bambuddy.py` against a real instance (verify endpoints vs
-      wiki.bambuddy.cool; pin instance version in integrations.md)
-- [ ] `/ws/status` relay + Dashboard screen: printer tiles with state,
-      progress, time remaining, thumbnail; MJPEG camera proxy
-- [ ] Spoolman client + spool/low-stock display
+- [x] `clients/bambuddy.py` per the published API reference (2026-08-27;
+      built against the dev-harness mock — endpoint verification against the
+      live instance still pending, see TODO.md)
+- [x] `/ws/status` relay + Dashboard screen: printer tiles with state,
+      progress, time remaining (2026-08-27; relay polls BamBuddy REST — its
+      WS message format is undocumented; thumbnails + MJPEG proxy pending)
+- [x] Spoolman client + spool/low-stock display (2026-08-27)
 
 ## Phase 2 — Orders (manual first)
 

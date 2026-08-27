@@ -1,34 +1,45 @@
-import { useEffect, useState } from 'react'
-
-type Health = { status: string; database: string }
+import PrinterCard from './components/PrinterCard'
+import SpoolStrip from './components/SpoolStrip'
+import { useDashboard } from './useDashboard'
 
 export default function App() {
-  const [health, setHealth] = useState<Health | null>(null)
-  const [error, setError] = useState(false)
-
-  useEffect(() => {
-    fetch('/api/health')
-      .then((r) => r.json())
-      .then(setHealth)
-      .catch(() => setError(true))
-  }, [])
+  const { data, backendDown } = useDashboard()
 
   return (
-    <main className="min-h-screen bg-slate-900 text-slate-100 flex flex-col items-center justify-center gap-6 p-8">
-      <h1 className="text-4xl font-bold tracking-tight">Cravetivity Operations</h1>
-      <p className="text-xl text-slate-400">Printer wall coming soon (Phase 1)</p>
-      <div className="rounded-2xl bg-slate-800 px-8 py-5 text-lg">
-        {error && <span className="text-red-400">Backend unreachable</span>}
-        {!error && !health && <span className="text-slate-400">Checking backend…</span>}
-        {health && (
-          <span>
-            Backend: <span className="text-emerald-400">{health.status}</span> · Database:{' '}
-            <span className={health.database === 'ok' ? 'text-emerald-400' : 'text-amber-400'}>
-              {health.database}
+    <main className="min-h-screen bg-slate-900 text-slate-100 p-6 flex flex-col gap-6">
+      <header className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold tracking-tight">Cravetivity Operations</h1>
+        <div className="text-sm text-slate-400">
+          {backendDown && <span className="text-red-400 font-semibold">Backend unreachable</span>}
+          {!backendDown && data?.bambuddy === 'unreachable' && (
+            <span className="text-amber-400 font-semibold">BamBuddy unreachable</span>
+          )}
+          {!backendDown && data?.bambuddy === 'unconfigured' && (
+            <span className="text-amber-400">BamBuddy not configured — set BAMBUDDY_URL</span>
+          )}
+          {!backendDown && data?.low_stock_count ? (
+            <span className="ml-3 text-amber-400">
+              {data.low_stock_count} spool{data.low_stock_count > 1 ? 's' : ''} low
             </span>
-          </span>
-        )}
-      </div>
+          ) : null}
+        </div>
+      </header>
+
+      {!data && !backendDown && <p className="text-slate-400">Loading…</p>}
+
+      {data && (
+        <>
+          <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 grow content-start">
+            {data.printers.map((p) => (
+              <PrinterCard key={p.id} printer={p} />
+            ))}
+            {data.printers.length === 0 && data.bambuddy === 'ok' && (
+              <p className="text-slate-400">No printers configured in BamBuddy.</p>
+            )}
+          </section>
+          <SpoolStrip data={data} />
+        </>
+      )}
     </main>
   )
 }

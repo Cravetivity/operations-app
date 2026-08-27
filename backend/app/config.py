@@ -21,6 +21,8 @@ class Settings(BaseSettings):
     shopify_access_token: str = ""
 
     order_poll_seconds: int = 300
+    printer_poll_seconds: float = 3.0
+    spool_low_stock_grams: float = 150.0
     display_timezone: str = "America/Chicago"
 
 

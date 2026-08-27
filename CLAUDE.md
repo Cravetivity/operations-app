@@ -22,13 +22,15 @@ and glanceability over feature completeness.
 
 ## Current status
 
-**Phase 0 scaffold complete (2026-08-27):** backend skeleton (health API,
-config, DB session, client/connector skeletons), frontend PWA shell with a
-hello dashboard, and a verified Docker Compose stack. No real features yet —
-Phase 1 (printer wall) is next. The `docs/` directory is the source of truth
-for intended architecture and scope. When you implement something, update the
-relevant doc in the same change. See [docs/roadmap.md](docs/roadmap.md) for
-build order.
+**Phase 1 printer wall working (2026-08-27):** BamBuddy client + REST-polling
+status relay over `/ws/status`, dashboard aggregation endpoint, Spoolman
+client with low-stock flagging, and the tablet printer-wall UI. Built against
+the dev harness (`docker compose --profile dev up`: bundled Spoolman + mock
+BamBuddy with simulated printers — see docs/architecture.md); endpoint shapes
+still need verification against the live BamBuddy instance. Phase 2 (orders)
+is next. The `docs/` directory is the source of truth for intended
+architecture and scope. When you implement something, update the relevant doc
+in the same change. See [docs/roadmap.md](docs/roadmap.md) for build order.
 
 ## Stack (decided)
 

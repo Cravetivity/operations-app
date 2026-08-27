@@ -138,6 +138,29 @@ marketplace by hand; API-side fulfillment is a later phase).
 remaining weight (Spoolman) → low-spool warning before dispatching a long
 print.
 
+## Development harness
+
+Phase 1 was built without live credentials, against services in the compose
+stack:
+
+- **Spoolman runs in compose for real** (service `spoolman`, host port 7912)
+  — it can graduate into the production Spoolman instance. Seed test
+  inventory with `cd backend && uv run python scripts/seed_spoolman.py`
+  (idempotent).
+- **BamBuddy is mocked** ([dev/mock-bambuddy/](../dev/mock-bambuddy/)),
+  started only with `docker compose --profile dev up`. It implements the
+  slice of the API we consume (`/api/v1/printers`, `/printers/{id}/status`,
+  `/health`, `X-API-Key` auth) and simulates four printers deterministically
+  from the clock: two mid-print, one cycling print → plate-clear → idle, one
+  that periodically raises an HMS error. Point `BAMBUDDY_URL` at the real
+  instance to switch; the mock's response shapes follow the published API
+  reference and must be corrected if live verification disagrees.
+
+The status relay polls BamBuddy REST every `PRINTER_POLL_SECONDS` (default
+3s) and fans out over `/ws/status`; BamBuddy's own websocket format is
+undocumented, so polling is the baseline until verified against a live
+instance.
+
 ## Deployment
 
 Docker Compose, two services in this repo:

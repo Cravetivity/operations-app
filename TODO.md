@@ -14,7 +14,8 @@
 - [ ] Reconcile print outcomes → order item states (webhooks + polling fallback)
 - [ ] Implement listing_map for one-tap repeat prints
 - [ ] Decide app auth: shared operator PIN vs per-user (see docs/roadmap.md open decisions)
-- [ ] QR scan workflow on tablet camera (BarcodeDetector): scan CRV:S/CRV:B codes to drive check-in/check-out and future print flow
+- [ ] Serve the app over HTTPS on the LAN (camera scanning requires a secure context on the tablet — reverse proxy w/ local CA, or Tailscale HTTPS)
+- [ ] Printer QR labels (`CRV:P:` + printer id) so check-out can be scan → scan too
 - [ ] Wire BamBuddy AMS assignment API for check-out once verified against live instance
 - [ ] Direct thermal printing (skip OS print dialog) if label printer supports network ZPL/ESC-POS — need printer model from owner
 - [ ] Define + build Products screen (likely catalog / listing_map management; scope with owner)
@@ -24,6 +25,8 @@
 ## In Progress
 
 ## Done
+
+- [x] QR scan workflow: scan spool/bin → assign to printer AMS slot or move to bin (done 2026-08-27: header Scan button; spool→scan-bin fast path, printer/slot + bin list pickers, bin→spool list; BarcodeDetector + jsQR fallback; needs HTTPS on tablet)
 
 - [x] Slim tablet Filament screen (loaded + low + search only); move bins/full inventory to new Admin screen (done 2026-08-27: Admin sits separated at menu bottom; task-focused principle recorded in CLAUDE.md)
 

@@ -165,9 +165,15 @@ our database — our app adds workflows and labels on top.
 - **Labels** are 2x1 in monochrome PDFs (`GET /api/labels/spool/{id}`,
   `/api/labels/bin/{name}`) rendered with reportlab + segno, printed at 100%
   scale through any OS thermal driver. QR payloads are compact for reliable
-  small-format scans: `CRV:S:<spool id>` and `CRV:B:<bin name>`. These codes
-  are the hook for the future scan-driven print workflow (scan spool → scan
-  printer/bin) on the tablet camera.
+  small-format scans: `CRV:S:<spool id>` and `CRV:B:<bin name>`.
+- **Scan workflow** (header Scan button, every screen): camera QR scanning
+  via native BarcodeDetector with a jsQR fallback. Scan a spool → action
+  sheet (scan a bin to check in — the fast path — or pick printer/AMS slot
+  or bin from a list); scan a bin → its spools, tap one to act. Requires a
+  secure context: camera APIs only work over HTTPS or localhost, so the
+  tablet needs the HTTPS deployment task done (TODO.md) — until then
+  Chrome's `#unsafely-treat-insecure-origin-as-secure` flag works for
+  testing.
 
 ## Development harness
 

@@ -11,7 +11,8 @@
 - [ ] Build eBay connector (Fulfillment API getOrders polling)
 - [ ] Build Shopify connector (custom-app token, GraphQL Admin API)
 - [ ] Build start-a-print flow (archive → printer → filament check → dispatch)
-- [ ] Reconcile print outcomes → order item states (webhooks + polling fallback)
+- [ ] Reconcile print outcomes → part states automatically (queued→printing→printed from BamBuddy webhooks/poll; Mark printed is manual until then)
+- [ ] Verify mock's archive/plate + print-dispatch endpoint shapes against live BamBuddy (with client + wizard adjustments)
 - [ ] Implement listing_map for one-tap repeat prints
 - [ ] Decide app auth: shared operator PIN vs per-user (see docs/roadmap.md open decisions)
 - [ ] Serve the app over HTTPS on the LAN (camera scanning requires a secure context on the tablet — reverse proxy w/ local CA, or Tailscale HTTPS)
@@ -25,6 +26,10 @@
 ## In Progress
 
 ## Done
+
+- [x] Orders schema + manual orders + Orders screen (done 2026-08-27: channels/orders/order_items/print_jobs migration, auto-run on container start; order cards w/ status + milestone toggles + item actions)
+- [x] Guided start-print wizard (done 2026-08-27: archive pick when unmapped → variance → plate (auto-skip single) → printer → ready confirm → AMS spool check → start; confirmations enforced server-side)
+- [x] Order/part status model with async fulfillment milestones (done 2026-08-27: part pending→queued→printing→printed/short; label/packed/shipped timestamps independent; headline derived at read)
 
 - [x] QR scan workflow: scan spool/bin → assign to printer AMS slot or move to bin (done 2026-08-27: header Scan button; spool→scan-bin fast path, printer/slot + bin list pickers, bin→spool list; BarcodeDetector + jsQR fallback; needs HTTPS on tablet)
 

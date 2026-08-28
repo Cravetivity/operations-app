@@ -4,6 +4,7 @@ import ScreenMenu from './components/ScreenMenu'
 import { useScreen } from './navigation'
 import AdminScreen from './screens/AdminScreen'
 import DashboardScreen from './screens/DashboardScreen'
+import OrdersScreen from './screens/OrdersScreen'
 import FilamentScreen from './screens/FilamentScreen'
 import PlaceholderScreen from './screens/PlaceholderScreen'
 import PrintsScreen from './screens/PrintsScreen'
@@ -21,7 +22,7 @@ function Screen({
 }) {
   switch (screen) {
     case 'orders':
-      return <PlaceholderScreen title="Orders" phase="Phase 2" />
+      return <OrdersScreen data={data} />
     case 'prints':
       return <PrintsScreen data={data} />
     case 'filament':

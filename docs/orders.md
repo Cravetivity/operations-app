@@ -34,8 +34,10 @@ orders
   (channel_key, external_id) unique when external_id not null
   buyer_name        text
   buyer_note        text nullable      -- personalization requests live here
-  status            enum (see below)   -- OUR lifecycle, channel-agnostic
+  canceled          bool default false
   external_status   text nullable      -- source's own status string, display only
+  label_printed_at / packed_at / shipped_at   timestamptz nullable  -- async milestones
+  (headline status is derived at read time — see Status model)
   ordered_at        timestamptz
   ship_by           date nullable      -- drives urgency sorting
   total_cents       int, currency char(3)
@@ -50,15 +52,18 @@ order_items
   variant           text nullable      -- color/size from listing options
   quantity          int
   personalization   text nullable
-  status            enum: pending | printing | printed | short  (per-item)
+  status            enum: pending | queued | printing | printed | short  (per-part)
   bambuddy_archive_id  text nullable   -- default archive to print for this item
   created_at / updated_at
 
 print_jobs           -- the order↔print link; one row per dispatched print
   id                uuid pk
   order_item_id     fk -> order_items nullable  (stock prints allowed)
-  bambuddy_job_ref  text               -- queue entry / print id from BamBuddy
-  bambuddy_printer_id text
+  bambuddy_job_ref  text nullable      -- queue entry / print id from BamBuddy
+  bambuddy_printer_id text, printer_name text
+  archive_id        text, plate int nullable
+  variance_note     text nullable      -- operator's variance from default (e.g. color)
+  printer_ready_confirmed / ams_confirmed   bool  -- wizard confirmations
   quantity          int default 1      -- items satisfied by this plate
   outcome           enum: dispatched | printing | success | failed | canceled
   created_at / updated_at
@@ -75,24 +80,32 @@ listing_map          -- teaches the app what to print for a listing
 listing (+ variant) is mapped to a BamBuddy archive, new orders for it come in
 pre-resolved to "tap to print".
 
-## Order status lifecycle
+## Status model (revised 2026-08-27, owner direction)
 
-```text
-new ──► in_progress ──► ready_to_ship ──► shipped ──► done
- │                                          ▲
- └────────────► canceled                    │
-        (v1: shipped is set manually; marketplace fulfillment APIs later)
-```
+Two independent tracks per order, because fulfillment steps are
+**asynchronous** with printing (a shipping label can be printed before the
+parts finish):
 
-- `new`: synced/entered, nothing printed yet.
-- `in_progress`: at least one item has a dispatched/printing job.
-- `ready_to_ship`: all items `printed`.
-- Item-level `short` flags a failed print needing re-run (surfaced on the
-  dashboard).
+1. **Part (order_item) print status** — consecutive:
+   `pending → queued → printing → printed`, with `short` for a failed print
+   needing a re-run. Transitions come from the print wizard (dispatch →
+   `queued`), the reconciler once BamBuddy outcomes are wired (`printing`,
+   `printed`), and operator taps (mark printed / short).
+2. **Fulfillment milestones** — independent nullable timestamps on the
+   order, toggled any time: `label_printed_at`, `packed_at`, `shipped_at`.
 
-Status is **derived where possible** (from item states and print outcomes) and
-only stored to make list queries cheap; transitions triggered by the
-reconciler (BamBuddy webhook/poll) or operator taps.
+The order's **headline status is derived at read time**, never stored:
+`shipped` (shipped_at set) ▸ `packed` ▸ `ready_to_ship` (all parts printed)
+▸ `in_progress` (any part past pending) ▸ `new`; `canceled` overrides.
+Milestones show as badges alongside the headline regardless of print state.
+
+## Print wizard (per part)
+
+Operator flow to start a print for an order item:
+variance from default (e.g. color) → plate (multi-plate 3MF) → printer →
+confirm printer ready/plate clear → confirm AMS holds compatible filament →
+start. Dispatch creates a `print_jobs` row recording every choice and both
+confirmations, then calls BamBuddy's print endpoint.
 
 ## Ingestion paths
 

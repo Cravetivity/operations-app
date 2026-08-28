@@ -25,6 +25,34 @@ PRINTERS = [
 
 FILENAMES = ["benchy_x4.3mf", "phone_stand_plate2.3mf", "etsy_keychain_batch.3mf"]
 
+ARCHIVES = [
+    {
+        "id": "a1",
+        "name": "Dragon Keychain",
+        "filename": "dragon_keychain.3mf",
+        "plates": [
+            {"index": 1, "name": "Plate 1 — body x6", "objects": 6},
+            {"index": 2, "name": "Plate 2 — clips x12", "objects": 12},
+        ],
+    },
+    {
+        "id": "a2",
+        "name": "Phone Stand",
+        "filename": "phone_stand.3mf",
+        "plates": [{"index": 1, "name": "Plate 1", "objects": 2}],
+    },
+    {
+        "id": "a3",
+        "name": "Planter Box Set",
+        "filename": "planter_box.3mf",
+        "plates": [
+            {"index": 1, "name": "Plate 1 — box", "objects": 1},
+            {"index": 2, "name": "Plate 2 — tray", "objects": 1},
+            {"index": 3, "name": "Plate 3 — feet x4", "objects": 4},
+        ],
+    },
+]
+
 
 def check_key(request: Request) -> None:
     if request.headers.get("X-API-Key") != API_KEY:
@@ -92,6 +120,28 @@ def list_printers(request: Request) -> list[dict]:
         {"id": p["id"], "name": p["name"], "model": p["model"], "ip_address": f"10.0.0.{p['id']}"}
         for p in PRINTERS
     ]
+
+
+@app.get("/api/v1/archives")
+def list_archives(request: Request) -> list[dict]:
+    check_key(request)
+    return ARCHIVES
+
+
+@app.post("/api/v1/archives/{archive_id}/print")
+def print_archive(archive_id: str, body: dict, request: Request) -> dict:
+    check_key(request)
+    if not any(a["id"] == archive_id for a in ARCHIVES):
+        raise HTTPException(status_code=404, detail="archive not found")
+    if not any(str(p["id"]) == str(body.get("printer_id")) for p in PRINTERS):
+        raise HTTPException(status_code=404, detail="printer not found")
+    return {
+        "job_id": f"job-{archive_id}-{int(time.time())}",
+        "archive_id": archive_id,
+        "printer_id": body["printer_id"],
+        "plate": body.get("plate"),
+        "status": "queued",
+    }
 
 
 @app.get("/api/v1/printers/{printer_id}/status")

@@ -45,6 +45,23 @@ class BamBuddyClient:
         resp.raise_for_status()
         return resp.json()
 
+    async def list_archives(self) -> list[dict]:
+        """Archives with plate metadata. Shape mirrors the mock; verify
+        against the live instance (TODO.md)."""
+        resp = await self._client.get("/archives")
+        resp.raise_for_status()
+        return resp.json()
+
+    async def print_archive(
+        self, archive_id: str, printer_id: int | str, plate: int | None
+    ) -> dict:
+        resp = await self._client.post(
+            f"/archives/{archive_id}/print",
+            json={"printer_id": printer_id, "plate": plate},
+        )
+        resp.raise_for_status()
+        return resp.json()
+
     async def get_printer_status(self, printer_id: int | str) -> dict:
         resp = await self._client.get(f"/printers/{printer_id}/status")
         resp.raise_for_status()

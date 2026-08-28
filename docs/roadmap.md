@@ -24,18 +24,21 @@
 
 ## Phase 2 — Orders (manual first)
 
-- [ ] Orders schema (channels, orders, items) + migrations per docs/orders.md
+- [x] Orders schema (channels, orders, items, print_jobs) + migrations per
+      docs/orders.md (2026-08-27; revised status model — async milestones)
 - [ ] Normalized `ChannelOrder` upsert service + `POST /api/ingest/{channel}`
       with per-channel tokens (unlocks external ingesters early)
-- [ ] Manual order entry + Orders screen (grouped by status, ship-by urgency)
+- [x] Manual order entry + Orders screen (2026-08-27; milestone toggles,
+      per-part status chips, ship-by urgency sort)
 - [ ] Etsy connector (OAuth2 setup, receipt upsert)
 - [ ] eBay connector (Fulfillment API getOrders upsert)
 - [ ] Shopify connector (custom-app token, GraphQL Admin API orders query)
 
 ## Phase 3 — The core loop: order → print
 
-- [ ] Start-a-print flow (archive → compatible idle printer → filament check
-      → dispatch via BamBuddy)
+- [x] Start-a-print wizard (2026-08-27: variance → plate → printer → ready
+      confirm → AMS confirm → start; against mock BamBuddy — archive/print
+      endpoint shapes need live verification)
 - [ ] `print_jobs` linking + outcome reconciliation (BamBuddy webhooks,
       polling fallback)
 - [ ] `listing_map` so repeat listings are one-tap

@@ -44,3 +44,40 @@ export type Dashboard = Snapshot & {
   spools: Spool[]
   low_stock_count: number
 }
+
+export type PrintJobT = {
+  id: string
+  printer_name: string
+  archive_id: string
+  plate: number | null
+  variance_note: string | null
+  outcome: string
+}
+
+export type OrderItemT = {
+  id: string
+  title: string
+  variant: string | null
+  quantity: number
+  personalization: string | null
+  status: 'pending' | 'queued' | 'printing' | 'printed' | 'short'
+  bambuddy_archive_id: string | null
+  jobs: PrintJobT[]
+}
+
+export type MilestoneKey = 'label_printed' | 'packed' | 'shipped'
+
+export type Order = {
+  id: string
+  channel: string
+  buyer_name: string
+  buyer_note: string | null
+  status: 'new' | 'in_progress' | 'ready_to_ship' | 'packed' | 'shipped' | 'canceled'
+  ordered_at: string
+  ship_by: string | null
+  milestones: Record<MilestoneKey, string | null>
+  items: OrderItemT[]
+}
+
+export type ArchivePlate = { index: number; name?: string; objects?: number }
+export type Archive = { id: string; name: string; filename?: string; plates: ArchivePlate[] }
